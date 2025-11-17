@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import FlowingGradient from "@/components/canvas/FlowingGradient";
 import SplashScreen from "@/components/SplashScreen";
+import { useAuth } from "@/hooks/useAuth";
+import { fetchUserCanvases, createNewCanvas } from "@/lib/canvas-helpers";
 import {
   Select,
   SelectContent,
@@ -61,7 +63,28 @@ export default function LandingPage() {
   const [agentMode, setAgentMode] = useState(false);
   const [model, setModel] = useState("grok4");
   const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [userCanvases, setUserCanvases] = useState<any[]>([]);
+  const [loadingCanvases, setLoadingCanvases] = useState(true);
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
+  // Fetch user's canvases on mount
+  useEffect(() => {
+    async function loadCanvases() {
+      try {
+        const canvases = await fetchUserCanvases();
+        setUserCanvases(canvases);
+      } catch (error) {
+        console.error("Failed to load canvases:", error);
+      } finally {
+        setLoadingCanvases(false);
+      }
+    }
+
+    if (!authLoading) {
+      loadCanvases();
+    }
+  }, [authLoading]);
 
   const handleStart = async () => {
     if (!prompt.trim()) return;
@@ -69,10 +92,35 @@ export default function LandingPage() {
     setIsLoading(true);
     sessionStorage.setItem("initialPrompt", prompt);
 
-    // Delay navigation to show splash screen for 4 seconds
-    setTimeout(() => {
+    try {
+      // Create new canvas
+      const canvas = await createNewCanvas("New Conversation");
+
+      // Delay navigation to show splash screen for 4 seconds
+      setTimeout(() => {
+        router.push(`/canvas?id=${canvas.id}`);
+      }, 4000);
+    } catch (error) {
+      console.error("Failed to create canvas:", error);
+      // Fallback to canvas without ID
+      setTimeout(() => {
+        router.push("/canvas");
+      }, 4000);
+    }
+  };
+
+  const handleCanvasClick = (canvasId: string) => {
+    router.push(`/canvas?id=${canvasId}`);
+  };
+
+  const handleNewProject = async () => {
+    try {
+      const canvas = await createNewCanvas("Untitled Canvas");
+      router.push(`/canvas?id=${canvas.id}`);
+    } catch (error) {
+      console.error("Failed to create canvas:", error);
       router.push("/canvas");
-    }, 4000);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -105,7 +153,10 @@ export default function LandingPage() {
         <ScrollArea className="flex-1 px-3">
           <div className="space-y-4">
             {/* New Project Button */}
-            <button className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-white/30 hover:bg-white/50 transition-colors font-sans font-medium">
+            <button
+              onClick={handleNewProject}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-white/30 hover:bg-white/50 transition-colors font-sans font-medium"
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -144,16 +195,27 @@ export default function LandingPage() {
               <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide font-sans">
                 Recent Canvases
               </div>
-              {canvases.map((canvas) => (
-                <button
-                  key={canvas.id}
-                  className="w-full flex items-center gap-3 px-6 py-2 text-sm rounded-lg hover:bg-white/50 transition-colors text-left font-sans"
-                >
-                  <span className="flex-1 truncate">
-                    {canvas.name}
-                  </span>
-                </button>
-              ))}
+              {loadingCanvases ? (
+                <div className="px-6 py-4 text-xs text-gray-500 font-sans">
+                  Loading canvases...
+                </div>
+              ) : userCanvases.length > 0 ? (
+                userCanvases.map((canvas) => (
+                  <button
+                    key={canvas.id}
+                    onClick={() => handleCanvasClick(canvas.id)}
+                    className="w-full flex items-center gap-3 px-6 py-2 text-sm rounded-lg hover:bg-white/50 transition-colors text-left font-sans"
+                  >
+                    <span className="flex-1 truncate">
+                      {canvas.name}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <div className="px-6 py-4 text-xs text-gray-500 font-sans">
+                  No canvases yet. Create one to get started!
+                </div>
+              )}
             </div>
           </div>
         </ScrollArea>

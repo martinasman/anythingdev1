@@ -14,7 +14,8 @@
       "Bash(mv:*)",
       "Bash(.gitignore)",
       "Bash(git push:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Supabase authentication and API infrastructure\n\nAuthentication System:\n- Add useAuth hook with signIn, signUp, signOut functions\n- Create login page (/auth/login) with email/password form\n- Create signup page (/auth/signup) with validation\n- Add auth callback route for OAuth support\n- Implement middleware for route protection (respects dev mode)\n\nAPI Routes:\n- Add /api/canvases (GET list, POST create)\n- Add /api/canvases/[id] (GET load, PUT update, DELETE archive)\n- Add /api/nodes (POST create)\n- Add /api/messages (POST create)\n- All routes check auth and respect dev mode\n\nConfiguration:\n- Update .env.local with Supabase credentials\n- Configure Supabase URL and anon key\n- Maintain dev mode for testing\n\nNext Phase:\n- Canvas.tsx save/load integration\n- LandingPage sidebar real data\n- User profile integration\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []

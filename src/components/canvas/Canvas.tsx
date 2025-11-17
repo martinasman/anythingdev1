@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   ReactFlow,
   Background,
@@ -29,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import ModelAndModeSelectorModal from "@/components/modals/ModelAndModeSelectorModal";
+import { loadCanvasFromSupabase } from "@/lib/canvas-helpers";
 
 // Node width constants for perfect vertical alignment
 const QUESTION_NODE_WIDTH = 225; // Fixed width for question nodes
@@ -48,6 +50,9 @@ const edgeTypes = {
 };
 
 export default function Canvas() {
+  const searchParams = useSearchParams();
+  const canvasId = searchParams?.get("id");
+
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [initialPrompt, setInitialPrompt] = useState<string | null>(null);
@@ -67,6 +72,39 @@ export default function Canvas() {
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isEraserMode, setIsEraserMode] = useState(false);
+  const [canvasLoaded, setCanvasLoaded] = useState(false);
+
+  // Load canvas from Supabase if ID is provided
+  useEffect(() => {
+    async function loadCanvas() {
+      if (!canvasId || canvasLoaded) return;
+
+      try {
+        console.log("[Canvas] Loading canvas:", canvasId);
+        const data = await loadCanvasFromSupabase(canvasId);
+        console.log("[Canvas] Loaded data:", data);
+
+        // Set viewport
+        if (data.canvas) {
+          setViewport({
+            x: data.canvas.viewport_x || 0,
+            y: data.canvas.viewport_y || 0,
+            zoom: data.canvas.viewport_zoom || 1.25,
+          });
+        }
+
+        // TODO: Load nodes and messages from data
+        // This would require converting the database format to React Flow format
+        // For now, we'll just load the viewport
+
+        setCanvasLoaded(true);
+      } catch (error) {
+        console.error("[Canvas] Failed to load canvas:", error);
+      }
+    }
+
+    loadCanvas();
+  }, [canvasId, canvasLoaded]);
 
   // Helper function to check if two nodes overlap
   const nodesOverlap = (pos1: { x: number; y: number }, pos2: { x: number; y: number }, width: number = 300, height: number = 150, margin: number = 50) => {
