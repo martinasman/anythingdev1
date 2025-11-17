@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx next dev:*)",
+      "Bash(set TURBOPACK=0)",
+      "Bash(npm install:*)",
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(del nul 2)",
+      "Bash(nul)",
+      "Bash(del .nul 2)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(.gitignore)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
