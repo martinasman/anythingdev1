@@ -12,7 +12,9 @@
       "Bash(del .nul 2)",
       "Bash(rm:*)",
       "Bash(mv:*)",
-      "Bash(.gitignore)"
+      "Bash(.gitignore)",
+      "Bash(git push:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
