@@ -8,9 +8,10 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -31,6 +32,7 @@ export function useAuth() {
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    const supabase = createClient();
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -39,6 +41,7 @@ export function useAuth() {
   };
 
   const signUp = async (email: string, password: string) => {
+    const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -47,6 +50,7 @@ export function useAuth() {
   };
 
   const signOut = async () => {
+    const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     return { error };
   };

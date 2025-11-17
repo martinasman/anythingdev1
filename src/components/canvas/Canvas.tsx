@@ -394,14 +394,14 @@ export default function Canvas() {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           borderColor: "#E5E5E7",
-          backgroundColor: "#efebe2",
+          backgroundColor: "#E9EAEE",
         },
       };
 
       // Create answer node (loading state) with hardcoded answer colors
       const answerNodeId = nanoid();
-      const darkenedBg = "#e3dfd7";  // Off-white (#efebe2) darkened by 5%
-      const darkenedBorder = "#DADADC";  // Light gray (#E5E5E7) darkened by 5%
+      const darkenedBg = "#EBEBEB";  // Answer node background (lighter gray)
+      const darkenedBorder = "#D8D8D8";  // Answer node border
 
       // Center answer node below question node
       const answerX = questionX + (QUESTION_NODE_WIDTH / 2) - (ANSWER_NODE_WIDTH / 2);
@@ -606,7 +606,7 @@ export default function Canvas() {
                           createdAt: new Date().toISOString(),
                           updatedAt: new Date().toISOString(),
                           borderColor: "#E5E5E7",
-                          backgroundColor: "#efebe2",
+                          backgroundColor: "#E9EAEE",
                           model: selectedModel === "gemini-2.5-flash" ? "Gemini 2.5" : selectedModel === "gpt-5.1" ? "GPT-5.1" : selectedModel === "claude-sonnet-4.5" ? "Claude 4.5" : selectedModel,
                           mode: "Business",
                           stepNumber: i + 1,
@@ -785,7 +785,7 @@ export default function Canvas() {
           let position;
           // Question nodes always use white background with light gray border
           const borderColor = "#E5E5E7";
-          const backgroundColor = "#efebe2";
+          const backgroundColor = "#E9EAEE";
 
           if (activeConversationId) {
             const activeNode = nds.find((n) => n.id === activeConversationId);
@@ -980,15 +980,15 @@ export default function Canvas() {
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               borderColor: "#E5E5E7",
-              backgroundColor: "#efebe2",
+              backgroundColor: "#E9EAEE",
             },
             draggable: true,
           };
 
           // Create new answer node positioned below question node with hardcoded answer colors
           const answerNodeId = nanoid();
-          const darkenedBg = "#e3dfd7";  // Off-white (#efebe2) darkened by 5%
-          const darkenedBorder = "#DADADC";  // Light gray (#E5E5E7) darkened by 5%
+          const darkenedBg = "#EBEBEB";  // Answer node background (lighter gray)
+          const darkenedBorder = "#D8D8D8";  // Answer node border
 
           // Center answer node below question node
           const answerX = questionX + (QUESTION_NODE_WIDTH / 2) - (ANSWER_NODE_WIDTH / 2);
@@ -1262,8 +1262,8 @@ export default function Canvas() {
 
       // Create answer node (loading state) with hardcoded answer colors
       const answerNodeId = nanoid();
-      const darkenedBg = "#e3dfd7";  // Off-white (#efebe2) darkened by 5%
-      const darkenedBorder = "#DADADC";  // Light gray (#E5E5E7) darkened by 5%
+      const darkenedBg = "#EBEBEB";  // Answer node background (lighter gray)
+      const darkenedBorder = "#D8D8D8";  // Answer node border
 
       // Center answer node below question node
       const answerX = previewNode.position.x + (QUESTION_NODE_WIDTH / 2) - (ANSWER_NODE_WIDTH / 2);

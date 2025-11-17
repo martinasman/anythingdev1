@@ -9,11 +9,11 @@ interface FlowingGradientProps {
 const backgroundColorSchemes: Record<string, { colors: { r: number; g: number; b: number }[]; base: string }> = {
   default: {
     colors: [
-      { r: 241, g: 255, b: 98 },   // Yellow (#f1ff62)
-      { r: 1, g: 146, b: 198 },    // Blue (#0192c6)
-      { r: 121, g: 200, b: 148 },  // Cyan blend (middle transition)
+      { r: 230, g: 240, b: 180 },  // Muted yellow (desaturated)
+      { r: 140, g: 200, b: 220 },  // Muted blue (desaturated)
+      { r: 185, g: 220, b: 200 },  // Muted cyan blend (middle transition)
     ],
-    base: "#7bc894"
+    base: "#c0d8d0"
   },
   neutral: {
     colors: [
